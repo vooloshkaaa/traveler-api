@@ -37,8 +37,11 @@ public class Location {
     @Column(precision = 10, scale = 2) private BigDecimal budget;
     @Column(columnDefinition = "text") private String notes;
 
+    @Version
+    @Column(nullable = false)
+    private Integer version = 1;
+
     @Generated(event = EventType.INSERT)
-    @Column(insertable = false, updatable = false) private Integer version;
-    @Generated(event = EventType.INSERT)
-    @Column(name = "created_at", insertable = false, updatable = false) private Instant createdAt;
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private Instant createdAt;
 }

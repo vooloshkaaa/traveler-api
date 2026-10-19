@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.sumdu.traveler.dto.LocationRequest;
 import ua.sumdu.traveler.entity.Location;
+import ua.sumdu.traveler.exception.ConflictException;
 import ua.sumdu.traveler.exception.NotFoundException;
+import ua.sumdu.traveler.exception.VersionConflictException;
 import ua.sumdu.traveler.repository.LocationRepository;
 import ua.sumdu.traveler.repository.TravelPlanRepository;
 
@@ -31,8 +33,15 @@ public class LocationService {
     @Transactional
     public Location update(UUID id, LocationRequest r) {
         validate(r, false);
+
         Location l = locations.findById(id)
                 .orElseThrow(() -> new NotFoundException("Location not found"));
+
+        if (r.version() == null)
+            throw new IllegalArgumentException("Version is required");
+
+        if (!l.getVersion().equals(r.version()))
+            throw new VersionConflictException("Validation error", l.getVersion());
         if (r.name() != null)          l.setName(r.name());
         if (r.address() != null)       l.setAddress(r.address());
         if (r.latitude() != null)      l.setLatitude(r.latitude());

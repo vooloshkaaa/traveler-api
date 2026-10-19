@@ -27,17 +27,19 @@ Content-Type: application/json
 HTTP 201
 [Captures]
 location1_id: jsonpath "$.id"
+location1_version: jsonpath "$.version"
 
 [Asserts]
 jsonpath "$.name" == "Eiffel Tower"
 jsonpath "$.visit_order" == 1
 jsonpath "$.travel_plan_id" == "{{location_plan_id}}"
+jsonpath "$.version" == 1
 
 # Test 2: Add second location (should be auto-ordered as 2)
 POST {{host}}/api/travel-plans/{{location_plan_id}}/locations
 Content-Type: application/json
 {
-  "name": "Louvre Museum", 
+  "name": "Louvre Museum",
   "address": "Rue de Rivoli, 75001 Paris",
   "latitude": 48.8606,
   "longitude": 2.3376,
@@ -48,6 +50,7 @@ Content-Type: application/json
 HTTP 201
 [Captures]
 location2_id: jsonpath "$.id"
+location2_version: jsonpath "$.version"
 
 [Asserts]
 jsonpath "$.visit_order" == 2
@@ -63,6 +66,7 @@ Content-Type: application/json
 HTTP 201
 [Captures]
 location3_id: jsonpath "$.id"
+location3_version: jsonpath "$.version"
 
 [Asserts]
 jsonpath "$.visit_order" == 3
@@ -77,21 +81,36 @@ jsonpath "$.locations[0].visit_order" == 1
 jsonpath "$.locations[1].visit_order" == 2
 jsonpath "$.locations[2].visit_order" == 3
 
-# Test 5: Skip reordering test (simplified system)
-# Test 5: Update single location
+# Test 5: Update single location with version and capture new version
 PUT {{host}}/api/locations/{{location1_id}}
 Content-Type: application/json
 {
   "name": "Eiffel Tower (Night Visit)",
   "budget": 30.00,
-  "notes": "Amazing night illumination"
+  "notes": "Amazing night illumination",
+  "version": {{location1_version}}
 }
 
 HTTP 200
+[Captures]
+location1_new_version: jsonpath "$.version"
+
 [Asserts]
 jsonpath "$.name" == "Eiffel Tower (Night Visit)"
 jsonpath "$.budget" == 30.00
 jsonpath "$.notes" == "Amazing night illumination"
+jsonpath "$.version" == 2
+
+# Test 5.1: Negative test - Version conflict (Optimistic Locking 409)
+PUT {{host}}/api/locations/{{location1_id}}
+Content-Type: application/json
+{
+  "name": "Eiffel Tower (Conflict)",
+  "budget": 35.00,
+  "version": {{location1_version}}
+}
+
+HTTP 409
 
 # Test 6: Delete location
 DELETE {{host}}/api/locations/{{location2_id}}

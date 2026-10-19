@@ -9,6 +9,7 @@ C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\exception\ApiExcepti
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\service\TravelPlanService.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\exception\NotFoundException.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\security\SecurityHeadersFilter.java
+C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\exception\ConflictException.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\dto\PlanRequest.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\service\LocationService.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\dto\LocationResponse.java

@@ -18,6 +18,8 @@ public class TravelPlanService {
 
     @Transactional
     public TravelPlan create(PlanRequest r) {
+        if (r.startDate() != null && r.endDate() != null && r.endDate().isBefore(r.startDate()))
+            throw new IllegalArgumentException("End date must be after start date");
         TravelPlan p = new TravelPlan();
         apply(p, r);
         return plans.saveAndFlush(p);          // @Generated підтягне version/created_at
@@ -31,6 +33,8 @@ public class TravelPlanService {
 
     @Transactional
     public TravelPlan update(UUID id, PlanRequest r) {
+        if (r.startDate() != null && r.endDate() != null && r.endDate().isBefore(r.startDate()))
+            throw new IllegalArgumentException("End date must be after start date");
         if (r.version() == null) throw new IllegalArgumentException("version is required");
         int rows = plans.updateWithVersion(id, r.version(), r.title(), r.description(),
                 r.startDate(), r.endDate(), r.budget(),

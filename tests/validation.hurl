@@ -299,11 +299,13 @@ Content-Type: application/json
 HTTP 201
 [Captures]
 valid_location_id: jsonpath "$.id"
+valid_location_version: jsonpath "$.version"   # <-- ДОБАВИТЬ ЭТУ СТРОКУ
 
 [Asserts]
 jsonpath "$.name" == "Valid Test Location"
 jsonpath "$.visit_order" == 1
 jsonpath "$.budget" == 150.50
+jsonpath "$.version" exists
 
 # ===================================================================
 # LOCATION UPDATE VALIDATION TESTS
@@ -314,7 +316,8 @@ PUT {{host}}/api/locations/{{valid_location_id}}
 Content-Type: application/json
 {
   "name": "Updated Location",
-  "latitude": -91.0
+  "latitude": -91.0,
+  "version": {{valid_location_version}}
 }
 
 HTTP 400
@@ -326,10 +329,23 @@ PUT {{host}}/api/locations/{{valid_location_id}}
 Content-Type: application/json
 {
   "arrival_date": "2025-06-02T18:00:00Z",
-  "departure_date": "2025-06-02T08:00:00Z"
+  "departure_date": "2025-06-02T08:00:00Z",
+  "version": {{valid_location_version}}
 }
 
 HTTP 400
+[Asserts]
+jsonpath "$.error" contains "Validation error"
+
+# Test 24.1: Update location with incorrect/outdated version (Optimistic Locking conflict)
+PUT {{host}}/api/locations/{{valid_location_id}}
+Content-Type: application/json
+{
+  "name": "Updated With Old Version",
+  "version": 999
+}
+
+HTTP 409
 [Asserts]
 jsonpath "$.error" contains "Validation error"
 

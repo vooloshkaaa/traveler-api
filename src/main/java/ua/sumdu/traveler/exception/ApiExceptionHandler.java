@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,6 +60,12 @@ public class ApiExceptionHandler {
     public ResponseEntity<ConflictBody> conflict(VersionConflictException e) {
         return ResponseEntity.status(409).body(
                 new ConflictBody(e.getMessage(), e.getCurrentVersion(), "Please refresh and try again"));
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ConflictBody> optimisticLock(ObjectOptimisticLockingFailureException e) {
+        return ResponseEntity.status(409).body(
+                new ConflictBody("Version conflict", null, "Please refresh and try again"));
     }
 
     @ExceptionHandler(Exception.class)
