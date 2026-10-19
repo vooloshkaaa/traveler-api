@@ -1,6 +1,7 @@
 ua\sumdu\traveler\repository\TravelPlanRepository.class
 ua\sumdu\traveler\dto\PlanRequest.class
 ua\sumdu\traveler\exception\ApiExceptionHandler.class
+ua\sumdu\traveler\controller\HealthController.class
 ua\sumdu\traveler\dto\PlanResponse.class
 ua\sumdu\traveler\entity\TravelPlan.class
 ua\sumdu\traveler\exception\ApiExceptionHandler$ConflictBody.class

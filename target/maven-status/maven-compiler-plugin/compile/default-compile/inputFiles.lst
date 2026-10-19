@@ -12,6 +12,7 @@ C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\security\SecurityHea
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\exception\ConflictException.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\dto\PlanRequest.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\service\LocationService.java
+C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\controller\HealthController.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\dto\LocationResponse.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\entity\Location.java
 C:\Users\Hanna\traveler-api\src\main\java\ua\sumdu\traveler\repository\TravelPlanRepository.java
